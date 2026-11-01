@@ -15,7 +15,7 @@ function CertificationBadge({ certificate }: { certificate: (typeof certificatio
     <li className="cert-card">
       <div className="cert-image">
         {imageFailed ? <span className="cert-missing">Badge image coming soon</span> :
-          <img src={certificate.image} alt={`${certificate.title} badge`} loading="lazy" onError={() => setImageFailed(true)} />}
+          <img src={certificate.image.replace('.png', '.jpg')} alt={`${certificate.title} badge`} width="600" height="600" loading="lazy" onError={() => setImageFailed(true)} />}
       </div>
       <h3>{certificate.title}</h3>
       <p className="cert-year">{certificate.year}</p>
@@ -34,49 +34,80 @@ const projects = [
     name: 'SafeZone PH', category: 'WEB & MOBILE APPLICATION',
     role: 'Frontend Developer, API Integration',
     description: "A web and mobile GIS-based disaster incident reporting and response system with geofencing alerts for Santa Maria, Bulacan MDRRMO",
-    image: '/assets/images/safezone-preview.png',
+    image: '/assets/images/safezone-preview.jpg',
     imageAlt: 'SafeZonePH dashboard showing the Santa Maria map, barangay boundaries, and incident reporting controls',
-    url: 'https://safezoneph.com',
+    url: 'https://www.safezoneph.com',
   },
   {
     name: 'Brew-Ha', category: 'WEB APPLICATION',
-    role: 'Frontend Developer, Database Designer',
+    role: 'Backend Developer, Database Designer',
     description: 'An E-commerce website designed to serve customers coffee and food.',
-    image: '/assets/images/brew-ha.png', imageAlt: '', url: '',
+    image: '/assets/images/brew-ha.png', imageAlt: 'Brew-Ha coffee and food storefront', url: '',
   },
   {
     name: 'Oppo', category: 'WEB APPLICATION',
     role: 'Database Designer',
     description: 'A SIS-integrated internship recommendation and placement system that connects student information and internship opportunities to recommend suitable placements based on students\' qualifications, specialization, and eligibility.',
-    image: '/assets/images/oppo.png', imageAlt: '', url: '',
+    image: '', imageAlt: '', url: '',
   },
 ];
 
-function ProjectShowcase() {
+function ProjectGallery({ project }: { project: (typeof projects)[number] }) {
+  const images = project.name === 'Brew-Ha'
+    ? ['/assets/images/brew-ha.png', '/assets/images/brew-ha2.png']
+    : project.name === 'Oppo'
+      ? ['/assets/images/oppo.png', '/assets/images/oppo2.png']
+      : ['/assets/images/safezone-preview.jpg', '/assets/images/safezone-2.png', '/assets/images/safezone-3.png'];
   const [index, setIndex] = React.useState(0);
-  const project = projects[index];
-  return <div className="project-showcase">
-    <div aria-live="polite" aria-atomic="true">
-      <article className="project-feature">
-        <div className="project-art project-preview">
-          {project.image ? <img src={project.image} alt={project.imageAlt} width="1919" height="944" loading="lazy" /> :
-            <div className="project-placeholder">Project preview coming soon</div>}
-        </div>
-        <div className="project-copy">
-          <span className="project-index">{String(index + 1).padStart(2, '0')}</span>
-          <p className="eyebrow">{project.category}</p><h3>{project.url ? <a className="project-title-link" href={project.url} target="_blank" rel="noopener noreferrer" aria-label={`${project.name} (opens in a new tab)`}>{project.name} <LinkArrow /></a> : project.name}</h3>
-          <p className="project-description">{project.description}</p>
-          <dl className="project-role"><dt>My role:</dt><dd>{project.role}</dd></dl>
-
-        </div>
-      </article>
-    </div>
-    <nav className="project-navigation" aria-label="Project navigation">
-      <button className="outline-link" type="button" onClick={() => setIndex(value => value - 1)} disabled={index === 0}><span aria-hidden="true">&larr;</span> Previous</button>
-      <span className="project-count">{index + 1} / {projects.length}</span>
-      <button className="outline-link" type="button" onClick={() => setIndex(value => value + 1)} disabled={index === projects.length - 1}>Next <span aria-hidden="true">&rarr;</span></button>
-    </nav>
+  const dialog = React.useRef<HTMLDialogElement>(null);
+  const alt = project.imageAlt || project.name + ' application screenshot';
+  function controls() {
+    return images.length > 1 && <div className="picture-controls" aria-label={project.name + ' pictures'}>
+      <button type="button" className="outline-link" disabled={index === 0} onClick={() => setIndex(value => value - 1)} aria-label={'Previous ' + project.name + ' picture'}>Previous picture</button>
+      <span className="project-count" role="status">{index + 1} / {images.length}</span>
+      <button type="button" className="outline-link" disabled={index === images.length - 1} onClick={() => setIndex(value => value + 1)} aria-label={'Next ' + project.name + ' picture'}>Next picture</button>
+    </div>;
+  }
+  return <div className="project-art project-preview">
+    <button type="button" className="preview-button" onClick={() => dialog.current?.showModal()} aria-label={'View ' + project.name + ' screenshot at full size'}>
+      <img src={images[index]} srcSet={project.name === 'SafeZone PH' && index === 0 ? '/assets/images/safezone-small.jpg 600w, /assets/images/safezone-preview.jpg 1200w' : undefined} sizes="(max-width: 600px) 86vw, 50vw" alt={alt + ' (' + (index + 1) + ' of ' + images.length + ')'} width="1200" height="590" loading="lazy" />
+      <span className="zoom-label">View full screenshot</span>
+    </button>
+    {controls()}
+    <dialog ref={dialog} className="image-dialog" onClick={event => { if (event.target === event.currentTarget) dialog.current?.close(); }}>
+      <form method="dialog"><button className="outline-link" autoFocus>Close screenshot</button></form>
+      <img src={project.name === 'SafeZone PH' && index === 0 ? '/assets/images/safezone-preview.png' : images[index]} alt={alt + ' (' + (index + 1) + ' of ' + images.length + ')'} />
+      {controls()}
+    </dialog>
   </div>;
+}
+
+function ProjectShowcase() {
+  return <div className="project-showcase">
+    {projects.map((project, index) => <article className="project-feature" key={project.name}>
+      <ProjectGallery project={project} />
+      <div className="project-copy">
+        <span className="project-index">{String(index + 1).padStart(2, '0')}</span>
+        <p className="eyebrow">{project.category}</p><h3>{project.name}</h3>
+        <p className="project-description">{project.description}</p>
+        <details><summary>Project details</summary>
+          <dl className="project-details"><dt>The purpose</dt><dd>{index === 0 ? 'Bring location-based incident reporting and response information together for Santa Maria, Bulacan MDRRMO.' : index === 1 ? 'Help customers browse coffee and food through an online storefront.' : 'Connect student records with internship opportunities to support suitable placements.'}</dd>
+            <dt>My contribution</dt><dd>{index === 0 ? 'Frontend development and API integration for the web and mobile application.' : index === 1 ? 'Backend development and database design for the e-commerce website.' : 'Database design for a system that considers qualifications, specialization, and eligibility.'}</dd></dl>
+        </details>
+        {project.url && <a className="outline-link" href={project.url} target="_blank" rel="noopener noreferrer">Visit live site <LinkArrow /></a>}
+      </div>
+    </article>)}
+
+  </div>;
+}
+
+function EmailContact() {
+  const [message, setMessage] = React.useState('');
+  async function copyEmail() {
+    try { await navigator.clipboard.writeText('kirktan.dev@gmail.com'); setMessage('Email copied.'); }
+    catch { setMessage('Select and copy kirktan.dev@gmail.com'); }
+  }
+  return <div className="email-contact"><a href="mailto:kirktan.dev@gmail.com">kirktan.dev@gmail.com</a><button type="button" onClick={copyEmail}>Copy email</button><span role="status">{message}</span></div>;
 }
 
 function App() {
@@ -85,18 +116,18 @@ function App() {
       <main>
         <header className="site-header">
           <a className="wordmark" href="#home">K. Tan<span> / PORTFOLIO</span></a>
-          <nav aria-label="Main navigation"><a href="#projects">My work</a><a href="#background">About me</a><a href="#contact">Contact</a></nav>
+          <nav aria-label="Main navigation"><a href="#projects">My Projects</a><a href="#background">About me</a><a href="#contact">Contact</a></nav>
         </header>
         <section id="home" className="profile" aria-labelledby="name">
           <FluxPhoto src="/assets/images/1x1-photo.jpeg" alt="Kirk Griffin F. Tan" />
           <div className="introduction">
-            <h1 id="name">Hello,<br /><em>I'm Kirk Griffin</em><br />F. Tan.</h1>
-            <p className="summary">Motivated Information Technology student with Specialization in Web and Mobile Technology, bringing knowledge of programming, database management, and UI/UX design. Uses creative problem-solving and strong communication to contribute to development tasks, while continuing to learn modern technologies and industry practice.</p>
+            <p className="availability">Available for internships starting December 2026</p><h1 id="name">Hello,<br /><em>I'm Kirk Griffin F. Tan </em></h1>
+            <p className="summary">I'm an Information Technology student specializing in web and mobile technology. I build web interfaces and connect them to data, including SafeZone PH, a disaster incident reporting and response project built for Santa Maria, Bulacan MDRRMO.</p><a className="selected-work-link" href="#projects">Explore my projects</a>
             <div className="contact" aria-label="Social profiles and contact">
               <a className="contact-item" href="https://github.com/korkydoobie" target="_blank" rel="noopener noreferrer">GitHub <LinkArrow /></a>
               <a className="contact-item" href="https://www.linkedin.com/in/kirk-griffin-tan-4747b1385/" target="_blank" rel="noopener noreferrer">LinkedIn <LinkArrow /></a>
             </div>
-            <p className="contact-note">kirktan.dev@gmail.com</p>
+            <EmailContact />
           </div>
         </section>
         <section id="projects" className="projects" aria-labelledby="projects-title">
@@ -104,29 +135,26 @@ function App() {
           <ProjectShowcase />
         </section>
         <div className="sections">
-          <section aria-labelledby="skills"><span className="section-number">01</span><h2 id="skills">Skills</h2><ul className="skills-list">
-            <li>Programming languages: HTML, CSS, Java, JavaScript, TypeScript, Kotlin, Python, PHP, C++, Swift</li>
-            <li>Database management: SQL</li>
-            <li>API integration</li>
-            <li>Web development</li>
-            <li>UI/UX design</li>
-            <li>GitHub proficiency</li>
+          <section aria-labelledby="skills"><span className="section-number">01</span><h2 id="skills">Skills</h2><p>Familiar with</p><ul className="skills-list">
+            <li><strong>Frontend:</strong> HTML, CSS, JavaScript, TypeScript</li>
+            <li><strong>Mobile:</strong> Kotlin, Swift</li>
+            <li><strong>Backend / Data:</strong> Java, PHP, Python, C++, SQL</li>
           </ul></section>
           <section aria-labelledby="background"><span className="section-number">02</span><h2 id="background">Background</h2>
             <p><strong>Education</strong></p>
-            <p>FEU Institute of Technology &middot; 2027</p>
+            <p>FEU Institute of Technology</p><p>Graduation year: 2027</p>
             <p className="education-degree">Bachelor of Science in Information Technology with Specialization in Web and Mobile Technology</p>
           </section>
 
         </div>
         <section className="certifications" aria-labelledby="certifications-title">
-          <span className="section-number">04</span>
+          <span className="section-number">03</span>
           <h2 id="certifications-title">Certifications</h2>
           <ul className="cert-grid">
             {certifications.map((certificate) => <CertificationBadge key={certificate.image} certificate={certificate} />)}
           </ul>
         </section>
-        <section id="contact" className="contact-section"><p className="eyebrow">INTERESTED IN ME?</p><h2>Let's start a conversation.</h2><a className="outline-link" href="mailto:kirktan.dev@gmail.com">Get in touch <LinkArrow /></a></section>
+        <section id="contact" className="contact-section"><p className="eyebrow">LET'S WORK TOGETHER</p><h2>Let's start a conversation.</h2><a className="outline-link" href="mailto:kirktan.dev@gmail.com">Get in touch <LinkArrow /></a></section>
         <footer><span>Kirk Griffin F. Tan</span><a href="#home">Back to top <LinkArrow up /></a></footer>
       </main>
     </>
