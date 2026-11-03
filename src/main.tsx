@@ -111,6 +111,7 @@ function EmailContact() {
 }
 
 function App() {
+  const resumeDialog = React.useRef<HTMLDialogElement>(null);
   return (
     <>
       <main>
@@ -129,9 +130,16 @@ function App() {
             </div>
             <EmailContact />
             <div className="resume-actions" aria-label="Resume">
-              <a className="outline-link" href="/assets/documents/resume.html" target="_blank" rel="noopener noreferrer">View resume <LinkArrow /></a>
-              <a className="outline-link" href="/assets/documents/Kirk-Tan-Resume-Main.docx" download="Kirk-Tan-Resume-Main.docx">Download resume <span aria-hidden="true">↓</span></a>
+              <button className="outline-link" type="button" onClick={() => resumeDialog.current?.showModal()}>View resume</button>
             </div>
+            <dialog className="resume-dialog" ref={resumeDialog} aria-labelledby="resume-title" onClick={event => { if (event.target === event.currentTarget) resumeDialog.current?.close(); }}>
+              <div className="resume-dialog-header">
+                <h2 id="resume-title">My resume</h2>
+                <a className="outline-link" href="/assets/documents/Kirk-Tan-Resume-Main.docx" download="Kirk-Tan-Resume-Main.docx">Download resume <span aria-hidden="true">↓</span></a>
+                <form method="dialog"><button className="outline-link" autoFocus>Close resume</button></form>
+              </div>
+              <iframe src="/assets/documents/resume.html" title="Kirk Griffin F. Tan resume" loading="lazy" />
+            </dialog>
           </div>
         </section>
         <section id="projects" className="projects" aria-labelledby="projects-title">
