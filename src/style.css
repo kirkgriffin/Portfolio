@@ -44,3 +44,5 @@ footer a { display: inline-flex; align-items: center; gap: 8px; }
 }
 
 .picture-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;flex-wrap:wrap}.picture-controls button{font-family:inherit;color:inherit;background:transparent;cursor:pointer;padding:12px;font-size:10px;letter-spacing:.3px}.picture-controls button:disabled{opacity:.45;cursor:default}.picture-controls button:hover:not(:disabled){background:#e9ebe4}
+
+.resume-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}.resume-actions .outline-link{gap:14px}.resume-actions .outline-link span{font-size:18px;line-height:1}

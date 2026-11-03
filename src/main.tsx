@@ -122,12 +122,16 @@ function App() {
           <FluxPhoto src="/assets/images/1x1-photo.jpeg" alt="Kirk Griffin F. Tan" />
           <div className="introduction">
             <p className="availability">Available for internships starting December 2026</p><h1 id="name">Hello,<br /><em>I'm Kirk Griffin F. Tan </em></h1>
-            <p className="summary">I'm an Information Technology student specializing in web and mobile technology. I build web interfaces and connect them to data, including SafeZone PH, a disaster incident reporting and response project built for Santa Maria, Bulacan MDRRMO.</p><a className="selected-work-link" href="#projects">Explore my projects</a>
+            <p className="summary">I'm an Information Technology student specializing in web and mobile applications. I build web interfaces and connect them to data, including SafeZone PH, a disaster incident reporting and response project built for Santa Maria, Bulacan MDRRMO.</p><a className="selected-work-link" href="#projects">Explore my projects</a>
             <div className="contact" aria-label="Social profiles and contact">
               <a className="contact-item" href="https://github.com/korkydoobie" target="_blank" rel="noopener noreferrer">GitHub <LinkArrow /></a>
               <a className="contact-item" href="https://www.linkedin.com/in/kirk-griffin-tan-4747b1385/" target="_blank" rel="noopener noreferrer">LinkedIn <LinkArrow /></a>
             </div>
             <EmailContact />
+            <div className="resume-actions" aria-label="Resume">
+              <a className="outline-link" href="/assets/documents/resume.html" target="_blank" rel="noopener noreferrer">View resume <LinkArrow /></a>
+              <a className="outline-link" href="/assets/documents/Kirk-Tan-Resume-Main.docx" download="Kirk-Tan-Resume-Main.docx">Download resume <span aria-hidden="true">↓</span></a>
+            </div>
           </div>
         </section>
         <section id="projects" className="projects" aria-labelledby="projects-title">
@@ -143,7 +147,7 @@ function App() {
           <section aria-labelledby="background"><span className="section-number">02</span><h2 id="background">Background</h2>
             <p><strong>Education</strong></p>
             <p>FEU Institute of Technology</p><p>Graduation year: 2027</p>
-            <p className="education-degree">Bachelor of Science in Information Technology with Specialization in Web and Mobile Technology</p>
+            <p className="education-degree">Bachelor of Science in Information Technology with Specialization in Web and Mobile Applications</p>
           </section>
 
         </div>
