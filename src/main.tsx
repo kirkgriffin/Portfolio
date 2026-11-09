@@ -125,7 +125,7 @@ function App() {
             <p className="availability">Available for internships starting December 2026</p><h1 id="name">Hello,<br /><em>I'm Kirk Griffin F. Tan </em></h1>
             <p className="summary">I'm an Information Technology student specializing in web and mobile applications. I build web interfaces and connect them to data, including SafeZone PH, a disaster incident reporting and response project built for Santa Maria, Bulacan MDRRMO.</p><a className="selected-work-link" href="#projects">Explore my projects</a>
             <div className="contact" aria-label="Social profiles and contact">
-              <a className="contact-item" href="https://github.com/korkydoobie" target="_blank" rel="noopener noreferrer">GitHub <LinkArrow /></a>
+              <a className="contact-item" href="https://github.com/kirkgriffin" target="_blank" rel="noopener noreferrer">GitHub <LinkArrow /></a>
               <a className="contact-item" href="https://www.linkedin.com/in/kirk-griffin-tan-4747b1385/" target="_blank" rel="noopener noreferrer">LinkedIn <LinkArrow /></a>
             </div>
             <EmailContact />
