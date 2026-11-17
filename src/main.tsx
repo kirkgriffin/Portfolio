@@ -34,7 +34,10 @@ const projects = [
     name: 'SafeZone PH', category: 'WEB & MOBILE APPLICATION',
     role: 'Frontend Developer, API Integration',
     description: "A web and mobile GIS-based disaster incident reporting and response system with geofencing alerts for Santa Maria, Bulacan MDRRMO",
+    purpose: 'Bring location-based incident reporting and response information together for Santa Maria, Bulacan MDRRMO.',
+    contribution: 'Frontend development and API integration for the web and mobile application.',
     image: '/assets/images/safezone-preview.jpg',
+    additionalImages: ['/assets/images/safezone-2.png', '/assets/images/safezone-3.png'],
     imageAlt: 'SafeZonePH dashboard showing the Santa Maria map, barangay boundaries, and incident reporting controls',
     url: 'https://www.safezoneph.com',
   },
@@ -42,22 +45,24 @@ const projects = [
     name: 'Brew-Ha', category: 'WEB APPLICATION',
     role: 'Backend Developer, Database Designer',
     description: 'An E-commerce website designed to serve customers coffee and food.',
+    purpose: 'Help customers browse coffee and food through an online storefront.',
+    contribution: 'Backend development and database design for the e-commerce website.',
     image: '/assets/images/brew-ha.png', imageAlt: 'Brew-Ha coffee and food storefront', url: '',
+    additionalImages: ['/assets/images/brew-ha2.png'],
   },
   {
-    name: 'Oppo', category: 'WEB APPLICATION',
-    role: 'Database Designer',
-    description: 'A SIS-integrated internship recommendation and placement system that connects student information and internship opportunities to recommend suitable placements based on students\' qualifications, specialization, and eligibility.',
-    image: '', imageAlt: '', url: '',
+    name: 'Teddiursa Airlines', category: 'WEB APPLICATION',
+    role: 'Full-stack Developer, Database Designer',
+    description: 'A web-based space travel booking system designed to provide users with a seamless way to explore extraterrestrial destinations, browse available space voyages, view updated travel costs, and secure reservations. It includes features such as booking management, digital ticket creation, and an administrative portal for overseeing passenger records, spacecraft schedules, and trip operations.',
+    purpose: 'Help travelers find and reserve space voyages online and give staff a central place to manage trips and passenger records.',
+    contribution: 'Full-stack development and database design for the space travel booking system.',
+    image: '/assets/images/project_teddiursa.png', imageAlt: 'Teddiursa Airlines space travel booking website', url: '',
+    additionalImages: [],
   },
 ];
 
 function ProjectGallery({ project }: { project: (typeof projects)[number] }) {
-  const images = project.name === 'Brew-Ha'
-    ? ['/assets/images/brew-ha.png', '/assets/images/brew-ha2.png']
-    : project.name === 'Oppo'
-      ? ['/assets/images/oppo.png', '/assets/images/oppo2.png']
-      : ['/assets/images/safezone-preview.jpg', '/assets/images/safezone-2.png', '/assets/images/safezone-3.png'];
+  const images = [project.image, ...project.additionalImages];
   const [index, setIndex] = React.useState(0);
   const dialog = React.useRef<HTMLDialogElement>(null);
   const alt = project.imageAlt || project.name + ' application screenshot';
@@ -91,8 +96,8 @@ function ProjectShowcase() {
         <p className="eyebrow">{project.category}</p><h3>{project.name}</h3>
         <p className="project-description">{project.description}</p>
         <details><summary>Project details</summary>
-          <dl className="project-details"><dt>The purpose</dt><dd>{index === 0 ? 'Bring location-based incident reporting and response information together for Santa Maria, Bulacan MDRRMO.' : index === 1 ? 'Help customers browse coffee and food through an online storefront.' : 'Connect student records with internship opportunities to support suitable placements.'}</dd>
-            <dt>My contribution</dt><dd>{index === 0 ? 'Frontend development and API integration for the web and mobile application.' : index === 1 ? 'Backend development and database design for the e-commerce website.' : 'Database design for a system that considers qualifications, specialization, and eligibility.'}</dd></dl>
+          <dl className="project-details"><dt>The purpose</dt><dd>{project.purpose}</dd>
+            <dt>My contribution</dt><dd>{project.contribution}</dd></dl>
         </details>
         {project.url && <a className="outline-link" href={project.url} target="_blank" rel="noopener noreferrer">Visit live site <LinkArrow /></a>}
       </div>
